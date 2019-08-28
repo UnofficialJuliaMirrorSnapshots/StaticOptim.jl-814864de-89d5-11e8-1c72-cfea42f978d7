@@ -25,7 +25,7 @@ res = soptimize(rosenbrock, sx/2)
 
 
 # Constrained
-
+@testset "Contrained" begin
 function U(h, w)
     h1, h2 = h[1], h[2]
     h1 >= 1 && return -Inf*one(h1)
@@ -72,7 +72,7 @@ constrained_soptimize(x -> -U(x, 1), sx, lower = SVector{4}(0.3, 0., 0.2, 0.2))
 #sols = [(w = w, l = l, res = constrained_soptimize(x -> -U(x, w), sx, lower = l, upper = u)) for l in lbs, u in ubs, w in ws];
 @test all(constrained_soptimize(x -> -U(x, w), sx, lower = l, upper = u).g_converged for l in lbs, u in ubs, w in ws)
 #sols = [(w = 1, l = l, res = constrained_soptimize(x -> -U(x, 1), sx, lower = l)) for l in lbs]
-
+end
 
 function fletcher_powell(x::AbstractVector)
     function theta(x::AbstractVector)
@@ -170,7 +170,6 @@ end
 x = SVector(0., 0.5, 0.5)
 res = sroot(eulerfun, x)
 @test res.g_converged == true
-
 # Test regular arrays (Nonlinear least squares)
 using Random
 Random.seed!(1234)
